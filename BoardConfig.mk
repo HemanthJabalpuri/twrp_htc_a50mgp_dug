@@ -1,11 +1,11 @@
 #
-# Copyright (C) 2015-2017 The Android Open-Source Project
+# Copyright 2017 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-# http://www.apache.org/licenses/LICENSE-2.0
+#      http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,56 +16,57 @@
 
 DEVICE_PATH := device/htc/a50mgp_dug
 
+# Bootloader
+TARGET_NO_BOOTLOADER := true
+TARGET_BOOTLOADER_BOARD_NAME := 820g
+
+# Platform
+TARGET_BOARD_PLATFORM := mt6592
+
 # Architecture
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
-TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT := cortex-a7
 
-# Assert
-TARGET_OTA_ASSERT_DEVICE := a50mgp_dug
-
-# Board
-TARGET_BOARD_PLATFORM := MT6592
-TARGET_BOOTLOADER_BOARD_NAME := lcsh92_cwet_htc_kk
-TARGET_NO_BOOTLOADER := true
-
-# File systems
-BOARD_HAS_LARGE_FILESYSTEM := true
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 6311936
-BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
-BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
-TARGET_USERIMAGES_USE_EXT4 := true
+# Flags
+TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
 
 # Kernel
-BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
-BOARD_KERNEL_BASE := 0x10000000
-BOARD_KERNEL_PAGESIZE := 2048
+BOARD_KERNEL_CMDLINE := androidboot.selinux=permissive
+BOARD_CUSTOM_BOOTIMG_MK := $(DEVICE_PATH)/mkbootimg.mk
+BOARD_MKBOOTIMG_ARGS := --pagesize 2048 --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --second_offset 0x00f00000 --tags_offset 0x00000100
 BOARD_FLASH_BLOCK_SIZE := 131072
-BOARD_RAMDISK_OFFSET := 0x01000000
-BOARD_KERNEL_TAGS_OFFSET := 0x00000100
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/kernel
 
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
+# Partitions & Image
+BOARD_BOOTIMAGE_PARTITION_SIZE := 10485760
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 10485760
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1048576000
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 2605187072
 
-BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
-BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
-
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
-TARGET_COPY_OUT_VENDOR := vendor
-
-# Recovery
-RECOVERY_SDCARD_ON_DATA := true
+TARGET_USERIMAGES_USE_EXT4 := true
+BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_SUPPRESS_SECURE_ERASE := true
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/etc/twrp.fstab
+TW_NO_REBOOT_BOOTLOADER := true
 
-# TWRP specific flags
+# TWRP-Specific
 TW_THEME := portrait_hdpi
-TW_INPUT_BLACKLIST := "hbtp_vm"
-TW_SCREEN_BLANK_ON_BOOT := true
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
-TW_MAX_BRIGHTNESS := 255
-TW_DEFAULT_BRIGHTNESS := 255
+
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
+TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
+
+# MTP causes a kernel panic on this device
+TW_EXCLUDE_MTP := true
+
+# USB Mounting
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/mt_usb/musb-hdrc.0/gadget/lun0/file
+
+RECOVERY_SDCARD_ON_DATA := true
+TW_CUSTOM_CPU_TEMP_PATH := /sys/devices/virtual/thermal/thermal_zone1/temp
 
 # Debug
 TWRP_INCLUDE_LOGCAT := true
@@ -76,4 +77,3 @@ TW_EXCLUDE_ENCRYPTED_BACKUPS := true
 #TW_EXTRA_LANGUAGES := true
 TW_EXCLUDE_BASH := true
 TW_EXCLUDE_NANO := true
-TW_EXCLUDE_SUPERSU := true

@@ -1,0 +1,50 @@
+#/system          ext4    /dev/block/mmcblk0p6
+#/system_image    emmc    /dev/block/mmcblk0p6
+/system          ext4    /emmc@android
+/system_image    emmc    /emmc@android
+
+#/data            emmc    /dev/usrdata
+#/data            ext4    /dev/block/mmcblk0p8
+/data            ext4    /emmc@usrdata
+
+#/cache           emmc    /dev/cache
+#/cache           ext4    /dev/block/mmcblk0p7
+/cache           ext4    /emmc@cache
+
+#/cota            emmc    /dev/cota
+#/cota            emmc    /dev/block/mmcblk0p5
+/cota            ext4    /emmc@cota
+
+#/protect_f       emmc    /dev/protect_f
+#/protect_f       ext4    /dev/block/mmcblk0p2
+/protect_f       ext4    /emmc@protect_f
+
+#/protect_s       emmc    /dev/protect_s
+#/protect_s       ext4    /dev/block/mmcblk0p3
+/protect_s       ext4    /emmc@protect_s
+
+
+#/secro           emmc    /dev/sec_ro
+/secro           emmc    /dev/block/mmcblk0p4
+
+#/ebr1            emmc    /dev/ebr1
+/ebr1            emmc    /dev/block/mmcblk0p1
+
+#/boot            emmc    /dev/BOOT
+#/boot            emmc    /dev/bootimg
+
+#/recovery        emmc    /dev/recovery
+#/misc            emmc    /dev/misc
+#/logo            emmc    /dev/logo
+#/lk              emmc    /dev/uboot
+#/seccfg          emmc    /dev/seccfg
+#/mbr             emmc    /dev/mbr
+#/ebr2            emmc    /dev/ebr2
+#/bmtpool         emmc    /dev/bmtpool
+#/proinfo         emmc    /dev/pro_info
+#/nvram           emmc    /dev/nvram
+#/expdb           emmc    /dev/expdb
+
+# Removable storage
+/external_sd     auto    /dev/block/mmcblk1p1    /dev/block/mmcblk1
+/usb-otg         auto    /dev/block/sda1         /dev/block/sda        flags=storage;removable
